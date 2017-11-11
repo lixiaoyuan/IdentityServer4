@@ -12,7 +12,7 @@ Client将在IdentityServer上请求Access token，并使用它来访问API。
 Scopes 定义您要保护系统中的资源， 例如 APIs。
 
 由于我们正在使用内存配置进行此演练 - 所有您需要做的事情
-添加一个API, 是创建一个``piResource``类型的对象并设置适当的属性。
+添加一个API, 是创建一个 ``piResource`` 类型的对象并设置适当的属性。
 
 添加一个文件 (例如 ``Config.cs``) 到你的项目，和以下代码::
 
