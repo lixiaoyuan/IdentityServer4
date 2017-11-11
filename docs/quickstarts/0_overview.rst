@@ -1,53 +1,51 @@
-Setup and Overview
+设置和概述
 ==================
 
-There are two fundamental ways to start a new IdentityServer project:
+有两个基本的方法来启动一个新的IdentityServer项目:
 
-* start from scratch
-* start with the ASP.NET Identity template in Visual Studio
+* 从头开始
+* 从Visual Studio中的ASP.NET Identity模板开始
 
-If you start from scratch, we provide a couple of helpers and in-memory stores, so 
-you don't have to worry about persistence right from the start.
+如果你从头开始, 我们提供了几个帮手 in-memory stores, 所以你从一开始就不必担心持久性。
 
-If you start with ASP.NET Identity, we provide an easy way to integrate with that as well.
+如果您从ASP.NETIdentity 开始, 我们提供了一个简单的方法来整合。
 
-The quickstarts provide step by step instructions for various common IdentityServer scenarios.
-They start with the absolute basics and become more complex - 
-it is recommended you do them in order.
+快速入门提供了各种常见IdentityServer场景的分步说明。
+他们从基础开始，变得更复杂，建议你按顺序做。
 
-Every quickstart has a reference solution - you can find the code in the 
+每个快速入门都有一个参考解决方案 -你可以在 
 `IdentityServer4.Samples <https://github.com/IdentityServer/IdentityServer4.Samples>`_
-repo in the quickstarts folder.
+文件夹中找到quickstarts 中的代码。
 
-Basic setup
+基本设置
 ^^^^^^^^^^^
-The screen shots show Visual Studio - but this is not a requirement.
+屏幕截图显示Visual Studio - 但这不是要求.
 
-**Creating the quickstart IdentityServer**
+**创建 quickstart IdentityServer**
 
-Start by creating a new ASP.NET Core project.
+首先创建一个新的ASP.NET Core项目。
 
 .. image:: images/0_new_web_project.png
 
-Then select the "Empty" option.
+然后选择“空白”项目。
 
 .. image:: images/0_empty_web.png
 
-Next, add the `IdentityServer4` nuget package:
+接下来, 添加 `IdentityServer4` nuget package:
 
 .. image:: images/0_nuget.png
     
-Alternatively you can use Package Manager Console to add the dependency by running the following command:
+或者，您可以使用软件包管理器控制台通过运行以下命令来添加依赖项:
 
     "Install-Package IdentityServer4"
 
-.. note:: IdentityServer build numbers 1.x target ASP.NET Core 1.1, and IdentityServer build numbers 2.x targets ASP.NET Core 2.0 .
+.. note:: IdentityServer内部版本号1.x目标ASP.NET Core 1.1, IdentityServer内部版本号2.x以ASP.NET Core 2.0为目标。
 
-IdentityServer uses the usual pattern to configure and add services to an ASP.NET Core host.
-In ``ConfigureServices`` the required services are configured and added to the DI system. 
-In ``Configure`` the middleware is added to the HTTP pipeline.
+IdentityServer使用通常的模式来配置和向ASP.NET Core主机添加服务。
+在``ConfigureServices``中配置所需的服务并添加到DI系统中。 
+在``Configure``中间件被添加到HTTP管道。
 
-Modify your ``Startup.cs`` file to look like this::
+修改你的``Startup.cs``文件看起来像这样::
 
     public class Startup
     {
