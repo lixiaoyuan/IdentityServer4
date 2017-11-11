@@ -1,27 +1,25 @@
 .. _refResosurceOwnerQuickstart:
-Protecting an API using Passwords
+使用密码保护API
 =================================
 
-The OAuth 2.0 resource owner password grant allows a client to send username and password
-to the token service and get an access token back that represents that user.
+OAuth 2.0 password 授权(grant)模式允许资源所有者 使用一个client发送username和password
+到token service 获取代表该用户的access token。
 
-The spec recommends using the resource owner password grant only for "trusted" (or legacy) applications.
-Generally speaking you are typically far better off using one of the interactive
-OpenID Connect flows when you want to authenticate a user and request access tokens.
+password 授权(grant)模式下建议仅用于可信的应用程序。
+一般来说，当你想验证用户和访问令牌(access token)时，使用interactive
+OpenID Connect会好得多。
 
-Nevertheless, this grant type allows us to introduce the concept of users to our
-quickstart IdentityServer, and that's why we show it.
+虽然, 这种授权模式使我们能够向用户接受概念，快速启动IdentityServer。这就是为什么我们展示它。
 
-Adding users
+添加 users
 ^^^^^^^^^^^^
-Just like there are in-memory stores for resources (aka scopes) and clients, there is also one for users.
+就像资源(aka scope)和客户端的内存存储一样,也有一个用户.
 
-.. note:: Check the ASP.NET Identity based quickstarts for more information on how to properly store and manage user accounts.
+.. note:: 查看基于ASP.NET Identity 快速入门，了解有关如何正确存储和管理用户账户。
 
-The class ``TestUser`` represents a test user and its claims. Let's create a couple of users
-by adding the following code to our config class:
+ ``TestUser`` 类 代表测试用户及用户Claims. 我们将用过下面代码添加到配置类中创建几个用户。:
 
-First add the following using statement to the config.cs file::
+首先将下面的 using 语句添加到config.cs 文件中::
 
     using IdentityServer4.Test;
 
@@ -44,7 +42,7 @@ First add the following using statement to the config.cs file::
         };
     }
 
-Then register the test users with IdentityServer::
+然后向IdentityServer注册用户::
 
     public void ConfigureServices(IServiceCollection services)
     {
@@ -56,20 +54,19 @@ Then register the test users with IdentityServer::
             .AddTestUsers(Config.GetUsers());
     }
 
-The ``AddTestUsers`` extension method does a couple of things under the hood
+这个 ``AddTestUsers`` 扩展方法在底层做了以下事情
 
-* adds support for the resource owner password grant
-* adds support to user related services typically used by a login UI (we'll use that in the next quickstart)
-* adds support for a profile service based on the test users (you'll learn more about that in the next quickstart)
+* 添加了对资源所有者密码授权的支持。
+* 增加了对用户相关服务的支持，通常由登录用户界面使用（我们将在下一个quickstart中使用）。
+* 添加对基于用户的配置文件服务的支持（您将在下一个quickstart中了解更多信息）
 
-Adding a client for the resource owner password grant
+为资源所有者密码授权添加一个Client
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-You could simply add support for the grant type to our existing client by changing the
-``AllowedGrantTypes`` property. If you need your client to be able to use both grant types
-that is absolutely supported.
+你可以简单地通过改变添加对我们现有Client的授权类型的
+``AllowedGrantTypes`` 属性。如果你需要Client能够使用这两种授权类型也是支持的。
 
-Typically you want to create a separate client for the resource owner use case, 
-add the following to your clients configuration::
+通常，你希望为资源所有者用例创建单独的客户端
+将以下内容添加到您的Client配置::
 
     public static IEnumerable<Client> GetClients()
     {
@@ -92,13 +89,12 @@ add the following to your clients configuration::
         };
     }
 
-Requesting a token using the password grant
+使用密码授权请求token
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-The client looks very similar to what we did for the client credentials grant.
-The main difference is now that the client would collect the user's password somehow, 
-and send it to the token service during the token request.
+现在client看起来非常类型于我们做的credentials授权类型。
+现在主要的区别就是Client会以某种方式手机用户的密码, 并在token请求期间将其发送给token服务。
 
-Again IdentityModel's ``TokenClient`` can help out here::
+ 在这里IdentityModel's 再次帮助 ``TokenClient`` ::
 
     // request token
     var tokenClient = new TokenClient(disco.TokenEndpoint, "ro.client", "secret");
@@ -113,9 +109,6 @@ Again IdentityModel's ``TokenClient`` can help out here::
     Console.WriteLine(tokenResponse.Json);
     Console.WriteLine("\n\n");
 
-When you send the token to the identity API endpoint, you will notice one small
-but important difference compared to the client credentials grant. The access token will
-now contain a ``sub`` claim which uniquely identifies the user. This "sub" claim can be seen by examining the content variable after the call to the API and also will be displayed on the screen by the console application. 
-
-The presence (or absence) of the ``sub`` claim lets the API distinguish between calls on behalf
-of clients and calls on behalf of users.
+当您将token发送到 identity API端点时，你会注意到一个小的
+但与client credentials授权相比有着重要的不同。这个access token 将包含
+唯一标识用户的 ``sub`` 声明(claim) 。 这个 "sub" 声明(claim) 可以用过调用API的内容来查看，并且也可以在控制台应用程序上查看。
