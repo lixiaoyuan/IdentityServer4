@@ -2,7 +2,7 @@
 使用 Client Credentials 保护 API 
 ==========================================
 
-本文 quickstart 介绍了使用 IdentityServer保护API的最基本场景。
+本文 quickstart 介绍了使用 IdentityServer保护API最基本的场景。
 
 在这种情况下，我们将定义一个API和一个想要访问它的Client。
 Client将在IdentityServer上请求Access token，并使用它来访问API。
@@ -110,7 +110,7 @@ Scopes 定义您要保护系统中的资源， 例如 APIs。
 
 .. image:: images/1_nuget_accesstokenvalidation.png
 
-像这样更新`Startup`::
+像这样更新``Startup``::
 
     public class Startup
     {
@@ -139,9 +139,9 @@ Scopes 定义您要保护系统中的资源， 例如 APIs。
     }
 
 
-``AddAuthentication`` 添加 authentication services 到 DI 和配置 ``"Bearer"`` 为默认scheme.
-``AddIdentityServerAuthentication`` 添加 IdentityServer access token 验证处理程序到 DI ，提供给authentication services使用.
-``UseAuthentication``添加authentication 中间件到管道中，以便每次调用都会自动执行authentication认证。
+``AddAuthentication`` 添加 authentication services 到 DI 和配置 ``"Bearer"`` 为默认scheme。
+``AddIdentityServerAuthentication`` 添加 IdentityServer access token 验证处理程序到 DI ，提供给authentication services使用。
+``UseAuthentication`` 添加authentication 中间件到管道中，以便每次调用都会自动执行authentication认证。
 
 如果您使用浏览器导航到控制器 (``http://localhost:5001/identity``), 
 你应该会返回一个401状态码。 这意味着您的API需要一个凭证(credential)。
