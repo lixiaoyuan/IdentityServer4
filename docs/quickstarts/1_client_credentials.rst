@@ -1,20 +1,20 @@
 .. _refClientCredentialsQuickstart:
-Protecting an API using Client Credentials
+使用 Client Credentials 保护 API 
 ==========================================
 
-This quickstart presents the most basic scenario for protecting APIs using IdentityServer.
+本文 quickstart 介绍了使用 IdentityServer保护API的最基本场景。
 
-In this scenario we will define an API and a client that wants to access it.
-The client will request an access token at IdentityServer and use it to gain access to the API.
+在这种情况下，我们将定义一个API和一个想要访问它的Client。
+Client将在IdentityServer上请求Access token，并使用它来访问API。
 
-Defining the API
+定义API
 ^^^^^^^^^^^^^^^^
-Scopes define the resources in your system that you want to protect, e.g. APIs.
+Scopes 定义您要保护系统中的资源， 例如 APIs。
 
-Since we are using the in-memory configuration for this walkthrough - all you need to do 
-to add an API, is to create an object of type ``ApiResource`` and set the appropriate properties.
+由于我们正在使用内存配置进行此演练 - 所有您需要做的事情
+添加一个API, 是创建一个``piResource``类型的对象并设置适当的属性。
 
-Add a file (e.g. ``Config.cs``) into your project and add the following code::
+添加一个文件 (例如 ``Config.cs``) 到你的项目，和以下代码::
 
     public static IEnumerable<ApiResource> GetApiResources()
     {
@@ -24,13 +24,12 @@ Add a file (e.g. ``Config.cs``) into your project and add the following code::
         };
     }
 
-Defining the client
+定义 client
 ^^^^^^^^^^^^^^^^^^^
-The next step is to define a client that can access this API.
+下一步是定义一个可以访问这个API的客户端。
 
-For this scenario, the client will not have an interactive user, and will authenticate
-using the so called client secret with IdentityServer.
-Add the following code to your configuration::
+对于这种情况，现在client和IdentityServer还没有用户和进行身份验证
+添加下面的代码到你的配置::
 
     public static IEnumerable<Client> GetClients()
     {
@@ -40,56 +39,52 @@ Add the following code to your configuration::
             {
                 ClientId = "client",
 
-                // no interactive user, use the clientid/secret for authentication
+                // 没有交互式用户, 使用clientid / secret进行身份验证。
                 AllowedGrantTypes = GrantTypes.ClientCredentials,
 
-                // secret for authentication
+                // secret 认证
                 ClientSecrets =
                 {
                     new Secret("secret".Sha256())
                 },
 
-                // scopes that client has access to
+                // 客户端访问的scopes
                 AllowedScopes = { "api1" }
             }
         };
     }
 
-Configure IdentityServer
+配置 IdentityServer
 ^^^^^^^^^^^^^^^^^^^^^^^^
-To configure IdentityServer to use your scopes and client definition, you need to add code
-to the ``ConfigureServices`` method. 
-You can use convenient extension methods for that - 
-under the covers these add the relevant stores and data into the DI system::
+使用定义的scopes和client配置 IdentityServer, 你需要添加代码到 ``ConfigureServices`` 方法. 
+你可以使用扩展方法
+将这些相关的stores和data加到DI系统中::
 
     public void ConfigureServices(IServiceCollection services)
     {
-        // configure identity server with in-memory stores, keys, clients and resources
+        // 配置 identity server 与 in-memory stores, keys, clients and resources
         services.AddIdentityServer()
             .AddDeveloperSigningCredential()
             .AddInMemoryApiResources(Config.GetApiResources())
             .AddInMemoryClients(Config.GetClients());
     }
 
-That's it - if you run the server and navigate the browser to 
-``http://localhost:5000/.well-known/openid-configuration``, you should see the so-called
-discovery document. 
-This will be used by your clients and APIs to download the necessary configuration data.
+这样 - 如果你运行服务器并浏览浏览器
+``http://localhost:5000/.well-known/openid-configuration``, 你应该看到所谓的发现文件。
+这将被您的客户端和API用于下载必要的配置数据。
 
 .. image:: images/1_discovery.png
 
-Adding an API
+添加 API
 ^^^^^^^^^^^^^
-Next, add an API to your solution. 
+接下来, 添加 API 到你的解决方案。 
 
-You can use the ASP.NET Core Web API template.
-Again, we recommend you take control over the ports and use the same technique as you used
-to configure Kestrel and the launch profile as before.
-This walkthrough assumes you have configured your API to run on ``http://localhost:5001``.
+您可以使用ASP.NET Core Web API模板。
+重复, 我们建议您控制端口并使用与您所用的相同的技术像以前一样配置Kestrel和启动配置文件。
 
-**The controller**
+**controller**
 
-Add a new controller to your API project::
+添加一个新的controller到您的API项目中::
 
     [Route("identity")]
     [Authorize]
@@ -101,23 +96,21 @@ Add a new controller to your API project::
             return new JsonResult(from c in User.Claims select new { c.Type, c.Value });
         }
     }
-
-This controller will be used later to test the authorization requirement, as well
-as visualize the claims identity through the eyes of the API.
+这个controller将稍后将用于测试授权要求，以及通过API查看claims identity。
 
 **Configuration**
 
-The last step is to add the authentication services to DI and the authentication middleware to the pipeline.
-These will:
+最后一步是将authentication services添加到DI和authentication middleware到管道中。
+这些会:
 
-* validate the incoming token to make sure it is coming from a trusted issuer
-* validate that the token is valid to be used with this api (aka scope)
+* 验证传入的token以确保它来自受信任的发行者
+* 验证令牌是有效的用于这个api（aka scope）
 
-Add the `IdentityServer4.AccessTokenValidation` NuGet package to your project.
+添加 `IdentityServer4.AccessTokenValidation` NuGet package 到你项目。
 
 .. image:: images/1_nuget_accesstokenvalidation.png
 
-Update `Startup` to look like this::
+像这样更新`Startup`::
 
     public class Startup
     {
@@ -146,33 +139,33 @@ Update `Startup` to look like this::
     }
 
 
-``AddAuthentication`` adds the authentication services to DI and configures ``"Bearer"`` as the default scheme.
-``AddIdentityServerAuthentication`` adds the IdentityServer access token validation handler into DI for use by the authentication services.
-``UseAuthentication`` adds the authentication middleware to the pipeline so authentication will be performed automatically on every call into the host.
+``AddAuthentication`` 添加 authentication services 到 DI 和配置 ``"Bearer"`` 为默认scheme.
+``AddIdentityServerAuthentication`` 添加 IdentityServer access token 验证处理程序到 DI ，提供给authentication services使用.
+``UseAuthentication``添加authentication 中间件到管道中，以便每次调用都会自动执行authentication认证。
 
-If you use the browser to navigate to the controller (``http://localhost:5001/identity``), 
-you should get a 401 status code in return. This means your API requires a credential.
+如果您使用浏览器导航到控制器 (``http://localhost:5001/identity``), 
+你应该会返回一个401状态码。 这意味着您的API需要一个凭证(credential)。
 
-That's it, the API is now protected by IdentityServer.
+就是这样，API现在由IdentityServer保护。
 
-Creating the client
+创建client
 ^^^^^^^^^^^^^^^^^^^
-The last step is to write a client that requests an access token, and then uses this
-token to access the API. For that, add a console project to your solution (see full code `here <https://github.com/IdentityServer/IdentityServer4.Samples/blob/release/Quickstarts/1_ClientCredentials/src/Client/Program.cs>`_).
+最后一步是编写一个获得access token的客户端, 然后使用这个
+access token访问API。为此, 添加一个控制台程序到你的解决方案 (see full code `here <https://github.com/IdentityServer/IdentityServer4.Samples/blob/release/Quickstarts/1_ClientCredentials/src/Client/Program.cs>`_).
 
-The token endpoint at IdentityServer implements the OAuth 2.0 protocol, and you could use 
-raw HTTP to access it. However, we have a client library called IdentityModel, that
-encapsulates the protocol interaction in an easy to use API.
+这个 token endpoint 在 IdentityServer 实现 OAuth 2.0 协议, 你可以使用
+ HTTP 去访问他。 然而, 我们需要一个名为 IdentityModel的库, 那个
+将协议交互封装在易于使用的API中。
 
-Add the `IdentityModel` NuGet package to your application.
+添加 `IdentityModel` NuGet package 到你的程序.
 
 .. image:: images/1_nuget_identitymodel.png
 
-IdentityModel includes a client library to use with the discovery endpoint.
-This way you only need to know the base-address of IdentityServer - the actual
-endpoint addresses can be read from the metadata::
+IdentityModel 包含一个发现endpoint的client库。
+这样你只需要知道IdentityServer的基地址， 实际的
+端点地址可以从元数据中读取::
 
-    // discover endpoints from metadata
+    // 从元数据发现 endpoints
     var disco = await DiscoveryClient.GetAsync("http://localhost:5000");
     if (disco.IsError)
     {
@@ -180,10 +173,10 @@ endpoint addresses can be read from the metadata::
         return;
     }
 
-Next you can use the ``TokenClient`` class to request the token.
-To create an instance you need to pass in the token endpoint address, client id and secret.
+接下来，您可以使用``TokenClient``类来请求token。
+你需要用token endpoint,client id 和 secret 去创建实例, 
 
-Next you can use the ``RequestClientCredentialsAsync`` method to request a token for your API::
+接下来你可以使用 ``RequestClientCredentialsAsync`` 方法为API请求一个token::
 
     // request token
     var tokenClient = new TokenClient(disco.TokenEndpoint, "client", "secret");
@@ -198,12 +191,12 @@ Next you can use the ``RequestClientCredentialsAsync`` method to request a token
     Console.WriteLine(tokenResponse.Json);
 
 
-.. note:: Copy and paste the access token from the console to `jwt.io <https://jwt.io>`_ to inspect the raw token.
+.. note:: 将access token从控制台复制并粘贴到 `jwt.io <https://jwt.io>`_ 去解析原始token.
 
-The last step is now to call the API.
+最后一步是调用API。
 
-To send the access token to the API you typically use the HTTP Authorization header.
-This is done using the ``SetBearerToken`` extension method::
+要将access token发送到API，通常使用HTTP  Authorization header。
+这是使用 ``SetBearerToken`` 扩展方法完成::
 
     // call api
     var client = new HttpClient();
@@ -220,25 +213,25 @@ This is done using the ``SetBearerToken`` extension method::
         Console.WriteLine(JArray.Parse(content));
     }
 
-The output should look like this:
+输出应该是这样的:
 
 .. image:: images/1_client_screenshot.png
 
-.. note:: By default an access token will contain claims about the scope, lifetime (nbf and exp), the client ID (client_id) and the issuer name (iss).
+.. note:: 默认情况下， access token 将包含 claims 相关的 scope, lifetime (nbf and exp),  client ID (client_id) and the issuer name (iss).
 
-Further experiments
+进一步实验
 ^^^^^^^^^^^^^^^^^^^
 
-This walkthrough focused on the success path so far
+本演练集中于迄今为止的成功之路
 
-* client was able to request token
-* client could use the token to access the API
+* 客户端能够请求令牌
+* 客户端可以使用令牌来访问API
 
-You can now try to provoke errors to learn how the system behaves, e.g.
+您现在可以尝试引发错误，以了解系统的行为， 例如
 
-* try to connect to IdentityServer when it is not running (unavailable)
-* try to use an invalid client id or secret to request the token
-* try to ask for an invalid scope during the token request
-* try to call the API when it is not running (unavailable)
-* don't send the token to the API
-* configure the API to require a different scope than the one in the token
+* 尝试连接到IdentityServer ，当它不运行（不可用）。
+* 尝试使用无效的client id或secret来请求令牌。
+* 尝试在令牌请求期间询问无效范围。
+* 尝试在不运行时调用API（不可用）。
+* 不要将令牌发送到API。
+* 将API配置为需要与令牌中的scope不同的scope。

@@ -66,51 +66,50 @@ IdentityServer使用通常的模式来配置和向ASP.NET Core主机添加服务
         }
     }
 
-``AddIdentityServer`` registers the IdentityServer services in DI. It also registers an in-memory store for runtime state.
-This is useful for development scenarios. For production scenarios you need a persistent or shared store like a database or cache for that.
-See the :ref:`EntityFramework <refEntityFrameworkQuickstart>` quickstart for more information.
+``AddIdentityServer`` 在DI中注册IdentityServer服务。它还为运行时状态注册了一个内存中的存储。
+这对于开发场景很有用。 对于生产场景，您需要持久存储或共享存储，如数据库或缓存。
+有关更多信息，请参阅:`EntityFramework <refEntityFrameworkQuickstart>` 快速入门。
 
-The ``AddDeveloperSigningCredential`` extension creates temporary key material for signing tokens.
-Again this might be useful to get started, but needs to be replaced by some persistent key material for production scenarios.
-See the :ref:`cryptography docs <refCrypto>` for more information.
+``AddDeveloperSigningCredential`` 扩展为签名令牌创建临时密钥。
+一开始这可能是有用的，但是在生产场景需要用一些持续的持久性密钥来替代 。
+有关更多信息，请参阅:`cryptography docs <refCrypto>` 。
 
-.. Note:: IdentityServer is not yet ready to be launched. We will add the required services in the following quickstarts.
+.. Note:: IdentityServer 尚未准备好启动。 我们将在以下快速入门中添加所需的服务。.
 
-Modify hosting
+修改项目 hosting
 ^^^^^^^^^^^^^^^
 
-By default Visual Studio uses IIS Express to host your web project. This is totally fine,
-except that you won't be able to see the real time log output to the console.
+默认情况下，Visual Studio使用IIS Express来托管您的Web项目。 这很好，
+但是您将无法看到实时日志输出到控制台。
 
-IdentityServer makes extensive use of logging whereas the "visible" error message in the UI
-or returned to clients are deliberately vague.
+IdentityServer广泛使用日志记录，而UI中的“visible”错误消息或者返回给客户故意含糊不清。
 
-We recommend to run IdentityServer in the console host. 
-You can do this by switching the launch profile in Visual Studio.
-You also don't need to launch a browser every time you start IdentityServer - you can turn that off as well:
+我们建议在控制台上运行 IdentityServer 。 
+您可以通过在Visual Studio中切换启动配置文件来完成此操作。
+每次启动IdentityServer时，也不需要启动浏览器，也可以关闭此功能：
 
 .. image:: images/0_launch_profile.png
 
-In addition, it will be helpful to run IdentityServer on a consistent URL for these quickstarts.
-You should also configure this URL in the launch profile dialog above, and use ``http://localhost:5000/``.
-In the above screenshot  you can see this URL has been configured.
+另外，在这些一致UR的quickstarts上运行IdentityServer会很有帮助。
+Y您还应在上面的启动配置文件对话框中配置此URL，使用 ``http://localhost:5000/``.
+在上面的截图中你可以看到这个URL已经被配置。
 
-.. Note:: We recommend to configure the same port for IIS Express and self-hosting. This way you can switch between the two without having to modify any configuration in your clients.
+.. Note:: 我们建议为IIS Express和自托管配置相同的端口。这样，您可以在两者之间切换，而无需修改客户端中的任何配置。
 
-To then choose the console host when you launch, you must select it in the launch menu from Visual Studio:
+要在启动时选择控制台主机，必须在Visual Studio的启动菜单中选择它：
 
 .. image:: images/0_choose_launch.png
 
-How to run the quickstart
+如何运行quickstarts
 ^^^^^^^^^^^^^^^^^^^^^^^^^
-As mentioned above every quickstart has a reference solution - you can find the code in the 
-`IdentityServer4.Samples <https://github.com/IdentityServer/IdentityServer4.Samples>`_
-repo in the quickstarts folder.
+如上所述，每个快速入门都有一个参考解决方案 - 您可以在
+`IdentityServer4.Samples <https://github.com/IdentityServer/IdentityServer4.Samples>`中找到代码
 
-The easiest way to run the individual parts of a quickstart solution is to set the startup mode to "current selection".
-Right click the solution and select "Set Startup Projects":
+
+运行快速启动解决方案的各个部分的最简单方法是将启动模式设置为“当前选择”。
+右键单击解决方案并选择“设置启动项目”：
 
 .. image:: images/0_startup_mode.png
 
-Typically you start IdentityServer first, then the API, and then the client. Only run in the debugger if you actually want to debug.
-Otherwise Ctrl+F5 is the best way to run the projects.
+通常，首先启动IdentityServer，然后启动API，然后启动客户端。 如果你真的想调试，只能在调试器中运行。
+否则，Ctrl + F5是运行项目的最佳方法。
