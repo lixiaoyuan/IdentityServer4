@@ -1,17 +1,15 @@
 .. _refImplicitQuickstart:
-Adding User Authentication with OpenID Connect
+添加 基于 OpenID Connect的User Authentication 
 ==============================================
 
-In this quickstart we want to add support for interactive user authentication via the
-OpenID Connect protocol to our IdentityServer.
+在这个quickstart中，我们希望通过添加交互式用户身份验证支持OpenID Connect协议到我们的IdentityServer。
 
-Once that is in place, we will create an MVC application that will use IdentityServer for 
-authentication.
+一旦完成, 我们将创建一个使用IdentityServer认证(authentication)的MVC应用程序
 
-Adding the UI
+添加 UI
 ^^^^^^^^^^^^^
-All the protocol support needed for OpenID Connect is already built into IdentityServer.
-You need to provide the necessary UI parts for login, logout, consent and error.
+OpenID Connect所需的所有协议支持已经添加到IdentityServer中。
+您需要提供登录，注销，同意和错误所需的UI部分。
 
 While the look & feel as well as the exact workflows will probably always differ in every
 IdentityServer implementation, we provide an MVC-based sample UI that you can use as a starting point.
